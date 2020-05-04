@@ -39,6 +39,7 @@ from transformers import (
     XLNetTokenizer,
 )
 
+import time
 
 logging.basicConfig(
     format="%(asctime)s - %(levelname)s - %(name)s -   %(message)s", datefmt="%m/%d/%Y %H:%M:%S", level=logging.INFO,
@@ -226,6 +227,7 @@ def main():
     else:
         input_ids = encoded_prompt
 
+    clock_start = time.time()
     output_sequences = model.generate(
         input_ids=input_ids,
         max_length=args.length + len(encoded_prompt[0]),
@@ -236,6 +238,8 @@ def main():
         do_sample=True,
         num_return_sequences=args.num_return_sequences,
     )
+    generation_ms_per_sequence = ((time.time() - clock_start) * 1000)/args.num_return_sequences
+    logger.info(f"Generation time: {generation_ms_per_sequence} [ms/sequence]")
 
     # Remove the batch dimension when returning multiple sequences
     if len(output_sequences.shape) > 2:
