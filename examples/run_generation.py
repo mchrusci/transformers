@@ -239,7 +239,6 @@ def main():
         num_return_sequences=args.num_return_sequences,
     )
     generation_ms_per_sequence = ((time.time() - clock_start) * 1000)/args.num_return_sequences
-    logger.info(f"Generation time: {generation_ms_per_sequence} [ms/sequence]")
 
     # Remove the batch dimension when returning multiple sequences
     if len(output_sequences.shape) > 2:
@@ -264,6 +263,8 @@ def main():
 
         generated_sequences.append(total_sequence)
         print(total_sequence)
+
+    logger.info(f"Generation time: {generation_ms_per_sequence} [ms/sequence]")
 
     return generated_sequences
 
