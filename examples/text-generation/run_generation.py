@@ -238,7 +238,9 @@ def main():
         do_sample=True,
         num_return_sequences=args.num_return_sequences,
     )
-    generation_time_ms = (time.time() - clock_start) * 1000
+    generation_time_s = time.time() - clock_start
+    sequences_per_second = args.num_return_sequences/generation_time_s
+    generation_time_ms = generation_time_s * 1000
     generation_time_per_sequence = generation_time_ms/args.num_return_sequences
 
     # Remove the batch dimension when returning multiple sequences
@@ -265,6 +267,7 @@ def main():
     #     generated_sequences.append(total_sequence)
     #     print(total_sequence)
 
+    logger.info(f"Generated sequences per second: {sequences_per_second} [SPS]")
     logger.info(f"Generation time total: {generation_time_ms} [ms]")
     logger.info(f"Generation time per sequence: {generation_time_per_sequence} [ms/sequence]")
 
